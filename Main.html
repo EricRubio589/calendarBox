@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Screens</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #3b0a75; /* Predominant purple */
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 80px;
+        }
+        .screen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding-top: 120px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .active {
+            display: block;
+        }
+        iframe {
+            width: 80%;
+            height: 70%;
+            border: none;
+            border-radius: 10px;
+        }
+            #public-calendar {
+            margin: 0 15% 15% 15%;
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+<body>
+
+<img id="logo" src="sandbox:/mnt/data/logo.jpg" alt="Logo">
+
+<!-- SCREEN 1: Public Calendar -->
+<div class="screen active" id="screen1">
+    <div id="public-calendar"></div>
+    <script>
+        var origin = "https://eisd.incidentiq.com";
+        (function(doc, tag, id){
+            var js = doc.getElementsByTagName(tag)[0];
+            if (doc.getElementById(id)) {return;}
+            js = doc.createElement(tag);
+            js.id = id;
+            js.src = origin + "/core/shared/public-calendar.js";
+            js.type = "text/javascript";
+            doc.body.appendChild(js);
+        }(document, 'script', 'public-calendar-script'));
+
+        window.onload = function() {
+            PublicCalendar.setOptions({
+                origin: origin,
+                targetId: "public-calendar",
+                upcoming: true,
+                viewId:"ff341c5f-efc6-f011-8195-000d3ae39c9e",
+            });
+            PublicCalendar.render();
+        }
+    </script>
+</div>
+
+<!-- SCREEN 2: YouTube Video -->
+<div class="screen" id="screen2">
+    <base href="https://example.com/">
+    <iframe src="https://www.youtube.com/embed/qTAmpXJBoCk?start=6&autoplay=1&mute=1&loop=1&playlist=qTAmpXJBoCk" referrerpolicy="origin" allow="autoplay; encrypted-media" allowfullscreen" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+
+<!-- SCREEN 3: Placeholder Text -->
+<div class="screen" id="screen3">
+    <h1>Placeholder Screen</h1>
+    <p>This is your third rotating screen. Replace this text with any content you want.</p>
+</div>
+
+<script>
+    let index = 0;
+    const screens = document.querySelectorAll('.screen');
+
+    setInterval(() => {
+        screens[index].classList.remove('active');
+        index = (index + 1) % screens.length;
+        screens[index].classList.add('active');
+    }, 10000); // 40 seconds rotation
+</script>
+
+</body>
+</html>
